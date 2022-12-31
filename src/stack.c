@@ -1,0 +1,66 @@
+#include "push_swap.h"
+
+t_stack	*create_stack(int value)
+{
+	t_stack	*stack;
+
+	stack = malloc(sizeof(t_stack));
+	if (!stack)
+		return (NULL);
+	stack->index = 0;
+	stack->pos = -1;
+	stack->target_pos = -1;
+	stack->cost_a = -1;
+	stack->cost_b = -1;
+	stack->next = NULL;
+	stack->value = value;
+	return (stack);
+}
+
+void	free_stack(t_stack **stack)
+{
+	t_stack	*tmp;
+
+	tmp = NULL;
+	if (!stack || !(*stack))
+		return ;
+	while (*stack)
+	{
+		tmp = (*stack)->next;
+		free(*stack);
+		*stack = tmp;
+	}
+	*stack = NULL;
+}
+
+t_stack	*get_stack_last(t_stack *stack)
+{
+	while (stack && stack->next)
+		stack = stack->next;
+	return (stack);
+}
+
+int	get_stack_length(t_stack *stack)
+{
+	int	length;
+
+	length = 0;
+	while (stack)
+	{
+		stack = stack->next;
+		length++;
+	}
+	return (length);
+}
+
+void	stack_add_back(t_stack **stack, t_stack *new)
+{
+	if (!new)
+		return ;
+	if (!*stack)
+	{
+		*stack = new;
+		return ;
+	}
+	get_stack_last(*stack)->next = new;
+}
