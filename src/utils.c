@@ -46,9 +46,21 @@ long	ft_atol(const char *nptr)
 	return (result * sign);
 }
 
+int	is_sorted(t_stack *stack)
+{
+	while (stack->next != NULL)
+	{
+		if (stack->value > stack->next->value)
+			return (0);
+		stack = stack->next;
+	}
+	return (1);
+}
+
 void	error(t_stack **stack_a, t_stack **stack_b)
 {
 	free_stack(stack_a);
 	free_stack(stack_b);
 	write(2, "Error\n", 6);
+	exit(1);
 }

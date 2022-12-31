@@ -33,26 +33,6 @@ void	free_stack(t_stack **stack)
 	*stack = NULL;
 }
 
-t_stack	*get_stack_last(t_stack *stack)
-{
-	while (stack && stack->next)
-		stack = stack->next;
-	return (stack);
-}
-
-int	get_stack_length(t_stack *stack)
-{
-	int	length;
-
-	length = 0;
-	while (stack)
-	{
-		stack = stack->next;
-		length++;
-	}
-	return (length);
-}
-
 void	stack_add_back(t_stack **stack, t_stack *new)
 {
 	if (!new)

@@ -11,7 +11,7 @@ static int	check_doubles(char **argv, int nb, int i)
 	return (0);
 }
 
-int	nput_check(char **argv)
+int	input_check(char **argv)
 {
 	int		i;
 	long	nb;
