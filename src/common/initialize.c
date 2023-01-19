@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "common.h"
 
 static void	assign_index(t_stack *stack, int stack_length)
 {

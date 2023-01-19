@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "common.h"
 
 int	is_digit(char c)
 {
@@ -46,15 +46,11 @@ long	ft_atol(const char *nptr)
 	return (result * sign);
 }
 
-int	is_sorted(t_stack *stack)
+int	ft_abs(int nb)
 {
-	while (stack->next != NULL)
-	{
-		if (stack->value > stack->next->value)
-			return (0);
-		stack = stack->next;
-	}
-	return (1);
+	if (nb < 0)
+		return (nb * -1);
+	return (nb);
 }
 
 void	error(t_stack **stack_a, t_stack **stack_b)

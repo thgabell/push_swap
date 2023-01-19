@@ -1,39 +1,132 @@
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 NAME	= push_swap
+BONUS	= checker
 
-SRC_PATH = src/
-OBJ_PATH = obj/
+SRC_PATH 		= src/
+PUSHSWAP_PATH	= push_swap/
+CHECKER_PATH	= checker/
+COMMON_PATH		= common/
+GNL_PATH		= get_next_line/
+OBJS_PATH 		= objs/
 
-SRC		= main.c \
-		utils.c \
-		input_check.c \
-		initialize.c \
-		stack.c stack_utils.c \
-		rotate.c swap.c push.c reverse_rotate.c \
-		tiny_sort.c 
-SRCS	= $(addprefix $(SRC_PATH), $(SRC))
-OBJ		= $(SRC:.c=.o)
-OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
-INCS	= -I ./includes/
+PUSHSWAP_SRC	= main.c \
+				sort.c \
+				positions.c \
+				cost.c
+CHECKER_SRC 	= main.c
+COMMON_SRC		= input_check.c \
+				initialize.c \
+				utils.c \
+				stack.c \
+				stack_utils.c \
+				rotate.c \
+				swap.c \
+				push.c \
+				reverse_rotate.c
+GNL_SRC			= get_next_line.c \
+				get_next_line_utils.c
 
-all: $(OBJ_PATH) $(NAME)
+PUSHSWAP_OBJS	= $(addprefix $(OBJS_PATH)$(PUSHSWAP_PATH), $(PUSHSWAP_SRC:.c=.o))
+CHECKER_OBJS 	= $(addprefix $(OBJS_PATH)$(CHECKER_PATH), $(CHECKER_SRC:.c=.o))
+COMMON_OBJS		= $(addprefix $(OBJS_PATH)$(COMMON_PATH), $(COMMON_SRC:.c=.o))
+GNL_OBJS		= $(addprefix $(OBJS_PATH)$(GNL_PATH), $(GNL_SRC:.c=.o))
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCS)
+INCS_PATH	= includes/
+INCS_SRC	= push_swap.h checker.h common.h get_next_line.h
+INCS_ARGS	= -I./includes
+INCS		= $(addprefix $(INCS_PATH), $(INCS_SRC))
 
-$(OBJ_PATH):
-	mkdir $(OBJ_PATH)
+RED = \033[0;31m
+GREEN = \033[0;32m
+NONE = \033[0m
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+all: $(NAME) $(BONUS)
+	@echo "$(GREEN)DONE$(NONE)"
+
+$(OBJS_PATH):
+	@mkdir $@
+
+$(OBJS_PATH)$(PUSHSWAP_PATH): | $(OBJS_PATH)
+	@mkdir $@
+
+$(OBJS_PATH)$(CHECKER_PATH): | $(OBJS_PATH)
+	@mkdir $@
+
+$(OBJS_PATH)$(COMMON_PATH): | $(OBJS_PATH)
+	@mkdir $@
+
+$(OBJS_PATH)$(GNL_PATH): | $(OBJS_PATH)
+	@mkdir $@
+
+$(NAME): $(OBJS_PATH)$(PUSHSWAP_PATH) $(PUSHSWAP_OBJS) $(OBJS_PATH)$(COMMON_PATH) $(COMMON_OBJS) $(LIBFTPRINTF) $(INCS)
+	@gcc $(CFLAGS) $(LIBFTPRINTF) $(INCS) $(PUSHSWAP_OBJS) $(COMMON_OBJS) -o $@
+	@echo "Creating push_swap..."
+
+$(BONUS): $(OBJS_PATH)$(CHECKER_PATH) $(CHECKER_OBJS) $(OBJS_PATH)$(COMMON_PATH) $(COMMON_OBJS) $(OBJS_PATH)$(GNL_PATH) $(GNL_OBJS) $(LIBFTPRINTF) $(INCS)
+	@gcc $(CFLAGS) $(LIBFTPRINTF) $(INCS) $(CHECKER_OBJS) $(GNL_OBJS) $(COMMON_OBJS) -o $@
+	@echo "Creating checker..."
+	
+$(OBJS_PATH)$(PUSHSWAP_PATH)%.o: $(SRC_PATH)$(PUSHSWAP_PATH)%.c $(INCS) $(LIBFTPRINTF)
+	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
+	@echo "Creating push_swap objects..."
+
+$(OBJS_PATH)$(CHECKER_PATH)%.o: $(SRC_PATH)$(CHECKER_PATH)%.c $(INCS) $(LIBFTPRINTF)
+	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
+	@echo "Creating checker objects..."
+
+$(OBJS_PATH)$(COMMON_PATH)%.o: $(SRC_PATH)$(COMMON_PATH)%.c $(INCS) $(LIBFTPRINTF)
+	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
+	@echo "Creating common objects..."
+
+$(OBJS_PATH)$(GNL_PATH)%.o: $(SRC_PATH)$(GNL_PATH)%.c $(INCS) $(LIBFTPRINTF)
+	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
+	@echo "Creating get_next_line objects..."
 
 clean:
-	rm -rf $(OBJ_PATH)
-	
+	@rm -rf $(OBJS_PATH)
+	@echo "$(RED)Deleting objects...$(NONE)"
+
 fclean: clean
-	rm -f $(NAME) libft/libft.a
+	@rm -f $(NAME) $(BONUS)
+	@echo "$(RED)Deleting binary...$(NONE)"
 
 re: fclean all
 
-.PHONY: all  clean fclean re
+test2: $(NAME)	
+	$(eval ARG = $(shell shuf -i 0-5000 -n 2))
+	./push_swap $(ARG) | ./checker_linux $(ARG)
+	@echo -n "Instructions: "
+	@./push_swap $(ARG) | wc -l
+
+test3: $(NAME)	
+	$(eval ARG = $(shell shuf -i 0-5000 -n 3))
+	./push_swap $(ARG) | ./checker_linux $(ARG)
+	@echo -n "Instructions: "
+	@./push_swap $(ARG) | wc -l
+
+test5: $(NAME)	
+	$(eval ARG = $(shell shuf -i 0-5000 -n 5))
+	./push_swap $(ARG) | ./checker_linux $(ARG)
+	@echo -n "Instructions: "
+	@./push_swap $(ARG) | wc -l
+
+test100: $(NAME)	
+	$(eval ARG = $(shell shuf -i 0-5000 -n 100))
+	./push_swap $(ARG) | ./checker_linux $(ARG)
+	@echo -n "Instructions: "
+	@./push_swap $(ARG) | wc -l
+
+test500: $(NAME) $(BONUS)
+	$(eval ARG = $(shell shuf -i 0-5000 -n 500))
+	./push_swap $(ARG) | ./checker $(ARG)
+	@echo -n "Instructions: "
+	@./push_swap $(ARG) | wc -l
+
+test1000: $(NAME)
+	$(eval ARG = $(shell shuf -i 0-5000 -n 1000))
+	./push_swap $(ARG) | ./checker_linux $(ARG)
+	@echo -n "Instructions: "
+	@./push_swap $(ARG) | wc -l
+
+.PHONY: all clean fclean re test2 test3 test5 test100 test500 test1000
