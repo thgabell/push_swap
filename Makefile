@@ -95,25 +95,25 @@ re: fclean all
 
 test2: $(NAME)	
 	$(eval ARG = $(shell shuf -i 0-5000 -n 2))
-	./push_swap $(ARG) | ./checker_linux $(ARG)
+	./push_swap $(ARG) | ./checker $(ARG)
 	@echo -n "Instructions: "
 	@./push_swap $(ARG) | wc -l
 
 test3: $(NAME)	
 	$(eval ARG = $(shell shuf -i 0-5000 -n 3))
-	./push_swap $(ARG) | ./checker_linux $(ARG)
+	./push_swap $(ARG) | ./checker $(ARG)
 	@echo -n "Instructions: "
 	@./push_swap $(ARG) | wc -l
 
 test5: $(NAME)	
 	$(eval ARG = $(shell shuf -i 0-5000 -n 5))
-	./push_swap $(ARG) | ./checker_linux $(ARG)
+	./push_swap $(ARG) | ./checker $(ARG)
 	@echo -n "Instructions: "
 	@./push_swap $(ARG) | wc -l
 
 test100: $(NAME)	
 	$(eval ARG = $(shell shuf -i 0-5000 -n 100))
-	./push_swap $(ARG) | ./checker_linux $(ARG)
+	./push_swap $(ARG) | ./checker $(ARG)
 	@echo -n "Instructions: "
 	@./push_swap $(ARG) | wc -l
 
@@ -125,7 +125,7 @@ test500: $(NAME) $(BONUS)
 
 test1000: $(NAME)
 	$(eval ARG = $(shell shuf -i 0-5000 -n 1000))
-	./push_swap $(ARG) | ./checker_linux $(ARG)
+	./push_swap $(ARG) | ./checker $(ARG)
 	@echo -n "Instructions: "
 	@./push_swap $(ARG) | wc -l
 
