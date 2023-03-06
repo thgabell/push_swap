@@ -42,7 +42,6 @@ GREEN = \033[0;32m
 NONE = \033[0m
 
 all: $(NAME) $(BONUS)
-	@echo "$(GREEN)DONE$(NONE)"
 
 $(OBJS_PATH):
 	@mkdir $@
@@ -61,35 +60,35 @@ $(OBJS_PATH)$(GNL_PATH): | $(OBJS_PATH)
 
 $(NAME): $(OBJS_PATH)$(PUSHSWAP_PATH) $(PUSHSWAP_OBJS) $(OBJS_PATH)$(COMMON_PATH) $(COMMON_OBJS) $(LIBFTPRINTF) $(INCS)
 	@gcc $(CFLAGS) $(LIBFTPRINTF) $(INCS) $(PUSHSWAP_OBJS) $(COMMON_OBJS) -o $@
-	@echo "Creating push_swap..."
+	@echo "$(GREEN) Creating $@... $(NONE)"
 
 $(BONUS): $(OBJS_PATH)$(CHECKER_PATH) $(CHECKER_OBJS) $(OBJS_PATH)$(COMMON_PATH) $(COMMON_OBJS) $(OBJS_PATH)$(GNL_PATH) $(GNL_OBJS) $(LIBFTPRINTF) $(INCS)
 	@gcc $(CFLAGS) $(LIBFTPRINTF) $(INCS) $(CHECKER_OBJS) $(GNL_OBJS) $(COMMON_OBJS) -o $@
-	@echo "Creating checker..."
+	@echo "$(GREEN) Creating $@... $(NONE)"
 	
 $(OBJS_PATH)$(PUSHSWAP_PATH)%.o: $(SRC_PATH)$(PUSHSWAP_PATH)%.c $(INCS) $(LIBFTPRINTF)
 	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
-	@echo "Creating push_swap objects..."
+	@echo "Creating $@..."
 
 $(OBJS_PATH)$(CHECKER_PATH)%.o: $(SRC_PATH)$(CHECKER_PATH)%.c $(INCS) $(LIBFTPRINTF)
 	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
-	@echo "Creating checker objects..."
+	@echo "Creating $@..."
 
 $(OBJS_PATH)$(COMMON_PATH)%.o: $(SRC_PATH)$(COMMON_PATH)%.c $(INCS) $(LIBFTPRINTF)
 	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
-	@echo "Creating common objects..."
+	@echo "Creating $@..."
 
 $(OBJS_PATH)$(GNL_PATH)%.o: $(SRC_PATH)$(GNL_PATH)%.c $(INCS) $(LIBFTPRINTF)
 	@gcc $(CFLAGS) $(INCS_ARGS) -o $@ -c $<
-	@echo "Creating get_next_line objects..."
+	@echo "Creating $@..."
 
 clean:
 	@rm -rf $(OBJS_PATH)
-	@echo "$(RED)Deleting objects...$(NONE)"
+	@echo "$(RED)Deleting $(OBJS_PATH)...$(NONE)"
 
 fclean: clean
 	@rm -f $(NAME) $(BONUS)
-	@echo "$(RED)Deleting binary...$(NONE)"
+	@echo "$(RED)Deleting $(NAME) & $(BONUS)...$(NONE)"
 
 re: fclean all
 
