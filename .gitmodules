@@ -1,0 +1,3 @@
+[submodule "srcs/get_next_line"]
+	path = srcs/get_next_line
+	url = https://github.com/thgabell/get_next_line.git
